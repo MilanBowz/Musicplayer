@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.effect.GaussianBlur?>
+<?import javafx.scene.effect.MotionBlur?>
+<?import javafx.scene.effect.Reflection?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.RadialGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Rectangle?>
+
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.image.Image?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/10.0.1"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="bowzgore.milan.musicfolderplayer.rest.UI" style="-fx-background-color:black">
+
+    <Button mnemonicParsing="false" onAction="#browseMusic" prefHeight="50.0"
+            prefWidth="100.0" text="Browse" textFill="BLACK">
+    </Button>
+
+    <ImageView fx:id="imageView" fitHeight="375.0" fitWidth="400.0" layoutX="0.0" layoutY="75.0" pickOnBounds="true" preserveRatio="true">
+    </ImageView>
+
+
+    <Label fx:id="songLabel" layoutY="470.0" prefWidth="800.0" textAlignment="CENTER" alignment="CENTER" style="-fx-text-fill: white;">
+        <font>
+            <Font size="20"  />
+        </font>
+    </Label>
+    <ProgressBar fx:id="songProgressBar" layoutX="0.0" layoutY="500.0" prefHeight="40.0" prefWidth="800.0"
+                 style="-fx-accent: blue;-fx-border-color: gray; -fx-border-width: 1;" progress="0">
+    </ProgressBar>
+    <Button fx:id="previousButton" layoutX="325.0" layoutY="550.0" mnemonicParsing="false" onAction="#previousMedia" prefHeight="50.0" prefWidth="50.0" style="-fx-background-color: BLACK">
+        <graphic>
+            <ImageView fitHeight="40" fitWidth="40" preserveRatio="true">
+                <image>
+                    <Image url="back.png" />
+                </image>
+            </ImageView>
+        </graphic>
+    </Button>
+    <Button fx:id="pauseButton" layoutX="375.0" layoutY="550.0" onAction="#play" prefHeight="50.0" prefWidth="50.0" style="-fx-background-color: BLACK">
+        <graphic>
+            <ImageView fitHeight="40" fitWidth="40" preserveRatio="true">
+                <image>
+                    <Image url="pause.png" />
+                </image>
+            </ImageView>
+        </graphic>
+    </Button>
+    <Button fx:id="nextButton" layoutX="425.0" layoutY="550.0" mnemonicParsing="false"  onAction="#nextMedia" prefHeight="50.0" prefWidth="50.0" style="-fx-background-color: BLACK">
+        <graphic>
+            <ImageView fitHeight="40" fitWidth="40" preserveRatio="true">
+                <image>
+                    <Image url="next.png" />
+                </image>
+            </ImageView>
+        </graphic>
+    </Button>
+
+
+    <ComboBox fx:id="speedBox" layoutX="150.0" layoutY="550.0" prefHeight="50.0" prefWidth="50.0" promptText="100%"/>
+    <Slider fx:id="volumeSlider" layoutX="650.0" layoutY="575.0" orientation="HORIZONTAL" prefHeight="14.0"
+            prefWidth="100.0" style="-fx-accent: red; -fx-background-radius: 20px;" value="100.0"/>
+
+
+    <!-- TableView for String Records -->
+    <Label fx:id="folderLabel" layoutX="400.0" layoutY="0.0" prefHeight="10.0" prefWidth="400.0" style="-fx-text-fill: white;">here is the folder</Label>
+    <TableView fx:id="stringRecordsTable" layoutX="400.0" layoutY="20.0" prefHeight="425.0" prefWidth="400.0">
+        <columns>
+        </columns>
+    </TableView>
+
+
+</AnchorPane>
