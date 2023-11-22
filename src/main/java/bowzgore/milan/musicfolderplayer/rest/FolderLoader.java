@@ -9,6 +9,7 @@ import javax.swing.*;
 import java.io.File;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.prefs.Preferences;
@@ -18,7 +19,7 @@ public class FolderLoader {
 
     public static String musicFolder = "";
     // Define a key for the music folder preference
-    private static final String MUSIC_FOLDER_KEY = "musicFolder";
+    public static final String MUSIC_FOLDER = "musicFolder";
     static List<String> musicFiles = new ArrayList<>();
     public static List<String> readFolder() {
         // Create a file chooser
@@ -75,14 +76,15 @@ public class FolderLoader {
         }
         File selectedFolder = dc.showDialog(window);
 
-        if (selectedFolder != null && !(selectedFolder.getAbsolutePath() + "/").equals(musicFolder)) {
+        if (selectedFolder != null && !(selectedFolder.getAbsolutePath() +  File.separator).equals(musicFolder)) {
             musicFiles.clear(); // Clear previous selections
-            musicFolder = selectedFolder.getAbsolutePath() + "/";
-            getPreferences().put(MUSIC_FOLDER_KEY, musicFolder);
+            musicFolder = selectedFolder.getAbsolutePath() + File.separator;
+            getPreferences().put(MUSIC_FOLDER, musicFolder);
             System.out.println(musicFolder);
 
             // Retrieve all MP3 files within the selected folder
             retrieveMP3Files(selectedFolder);
+            //retrieveFirstFolder(selectedFolder);
             return true;
         }
         else {
@@ -100,12 +102,37 @@ public class FolderLoader {
             }
         }
     }
+    private static void retrieveFirstFolder(File parentDirectory) {
+        // List all files and directories in the provided directory
+        File[] files = parentDirectory.listFiles();
+
+        // Filter out only directories
+        List<File> folderList = new ArrayList<>(Arrays.asList(files));
+
+        // Find the first directory
+        File firstFolder = folderList.stream()
+                .filter(File::isDirectory)
+                .findFirst()
+                .orElse(null);
+
+        // Check if a directory was found
+        if (firstFolder != null) {
+            System.out.println("First folder found: " + firstFolder.getAbsolutePath());
+        } else {
+            System.out.println("No folders found in: " + parentDirectory.getAbsolutePath());
+        }
+    }
     private static Preferences getPreferences() {
         // Retrieve the user preferences node for your application
         return Preferences.userNodeForPackage(FolderLoader.class);
     }
     public static String getMusicFolder() {
         // Retrieve the music folder from preferences, default to an empty string if not found
-        return getPreferences().get(MUSIC_FOLDER_KEY, "");
+        return getPreferences().get(MUSIC_FOLDER, "");
     }
+    public static void resetMusicFolder() {
+        // Reset the stored music folder value in preferences
+        getPreferences().put(MUSIC_FOLDER,"");
+    }
+
 }

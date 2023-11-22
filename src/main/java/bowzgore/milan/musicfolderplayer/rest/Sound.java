@@ -14,7 +14,10 @@ import javafx.util.Duration;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Handler;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
@@ -27,41 +30,31 @@ import org.jaudiotagger.tag.TagException;
 import org.jaudiotagger.tag.datatype.Artwork;
 
 public class Sound extends Thread {
-    private static File filePlaying;
-    private static MediaPlayer mediaPlayer;
+    private File filePlaying;
+    private MediaPlayer mediaPlayer;
 
 
     // to store current position
     //Long currentFrame;
     // current status of clip
     //String status = String.valueOf(mediaPlayer.statusProperty());
-    private static Media media;
+    private Media media;
 
     public static boolean paused = true;
 
     public static Artwork coverArt;
-
-    MediaView mediaView;
-
 
     // constructor to initialize streams and clip
     public Sound(String filelocation) {
         // create File object
         //initialize(null,null);
         filePlaying = new File(FolderLoader.musicFolder + filelocation).getAbsoluteFile();
-        System.out.println(filePlaying.toURI().toString());
         media = new Media(filePlaying.toURI().toString());
         mediaPlayer = new MediaPlayer(media);
         loadMetadata();
-        mediaView = new MediaView(mediaPlayer);
-        mediaView.setOnError(new EventHandler<MediaErrorEvent>() {
-            public void handle(MediaErrorEvent t) {
-                // Handle asynchronous error in MediaView.
-            }
-        });
     }
     private void loadMetadata()  {
-
+        disableJaudiotaggerLogs();
         try {
             AudioFile audioFile = AudioFileIO.read(filePlaying);
             Tag tag = audioFile.getTag();
@@ -74,9 +67,20 @@ public class Sound extends Thread {
             // You can log a message or perform other actions as needed
             System.out.println("Error loading metadata: " + filePlaying);
         }
+    }
+    private static void disableJaudiotaggerLogs() {
+        // Get the logger for Jaudiotagger
+        Logger jaudiotaggerLogger = Logger.getLogger("org.jaudiotagger");
 
+        // Set the logging level to WARNING
+        jaudiotaggerLogger.setLevel(Level.WARNING);
 
-
+        // Disable console handler
+        for (Handler handler : jaudiotaggerLogger.getHandlers()) {
+            if (handler instanceof ConsoleHandler) {
+                jaudiotaggerLogger.removeHandler(handler);
+            }
+        }
     }
 
     // Getter method for cover art
@@ -116,23 +120,29 @@ public class Sound extends Thread {
     }
 
     public void change(String file) {
-        //start the media
         mediaPlayer.stop();
-        filePlaying = new File(FolderLoader.musicFolder + file).getAbsoluteFile();//
+        filePlaying = new File(FolderLoader.musicFolder + file).getAbsoluteFile();
         media = new Media(filePlaying.toURI().toString());
         mediaPlayer = new MediaPlayer(media);
         replay();
         loadMetadata();
+        paused = false;
+    }
+    public void changeFolder(String file) {
+        mediaPlayer.stop();
+        filePlaying = new File(FolderLoader.musicFolder + file).getAbsoluteFile();
+        media = new Media(filePlaying.toURI().toString());
+        mediaPlayer = new MediaPlayer(media);
+        loadMetadata();
+        paused = true;
     }
     public void stopMusic(){
         mediaPlayer.stop();
-
         paused = true;
     }
 
     public double getEnd() {
         return media.getDuration().toSeconds();
-
     }
 
 
@@ -147,6 +157,7 @@ public class Sound extends Thread {
             mediaPlayer.seek(duration);
         }
     }
+
 
 
 }

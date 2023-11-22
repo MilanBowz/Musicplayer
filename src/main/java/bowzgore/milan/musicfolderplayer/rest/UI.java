@@ -1,15 +1,12 @@
 package bowzgore.milan.musicfolderplayer.rest;
-import java.io.Console;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
-import com.sun.jna.WString;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 
@@ -25,11 +22,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.event.EventHandler;
 import org.jaudiotagger.tag.datatype.Artwork;
-import org.controlsfx.control.Notifications;
 
 
 public class UI implements Initializable {
@@ -90,6 +85,7 @@ public class UI implements Initializable {
         //imageView.setImage(image);
 
         /*speedBox.setOnAction(this::changeSpeed);*/
+        beginTimer();
 
         volumeSlider.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
@@ -132,16 +128,13 @@ public class UI implements Initializable {
                 });
             }
         });
-        System.out.println(FolderLoader.getMusicFolder());
         if(!Objects.equals(FolderLoader.getMusicFolder(), "")){
             FolderLoader.readFolder2();
-            if(FolderLoader.musicFiles.size() > 0){
+            if(!FolderLoader.musicFiles.isEmpty()){
                 music = new Sound(FolderLoader.musicFiles.get(0));
                 ObservableList<String> observableSongs = FXCollections.observableArrayList(FolderLoader.musicFiles);
-
                 // Add data to the table
                 stringRecordsTable.setItems(observableSongs);
-
                 folderLabel.setText(FolderLoader.musicFolder);
                 updateUIWithSound();
             }
@@ -169,6 +162,7 @@ public class UI implements Initializable {
         }
         else {
             playIcon.setImage(new Image("play.png"));
+            music.changeVolume(volumeSlider.getValue());
         }
     }
 
@@ -176,16 +170,19 @@ public class UI implements Initializable {
     public void browseMusic(ActionEvent event) {
         boolean change = FolderLoader.readFolder2(event);
         if(change){
+            songPlaying = 0;
             ObservableList<String> observableSongs = FXCollections.observableArrayList(FolderLoader.musicFiles);
-
             // Add data to the table
             stringRecordsTable.setItems(observableSongs);
-
-            songPlaying = 0;
-            music = new Sound(FolderLoader.musicFiles.get(songPlaying));
-            music.stopMusic();
-
             folderLabel.setText(FolderLoader.musicFolder);
+
+            if(music != null){
+                music.changeFolder(FolderLoader.musicFiles.get(songPlaying));
+            }
+            else {
+                music = new Sound(FolderLoader.musicFiles.get(songPlaying));
+            }
+
             updateUIWithSound();
         }
     }
@@ -196,7 +193,6 @@ public class UI implements Initializable {
         if(FolderLoader.musicFiles.get(songPlaying) != null){
             if (Sound.paused) {
                 music.play();
-                beginTimer();
                 pauseButton.setGraphic(playIcon);
             }
             else {
@@ -211,7 +207,6 @@ public class UI implements Initializable {
         if (songPlaying > 0) {
             songPlaying--;
             music.change(FolderLoader.musicFiles.get(songPlaying));
-            //beginTimer();
         }
         else {
             songPlaying = FolderLoader.musicFiles.size() - 1;
@@ -225,7 +220,6 @@ public class UI implements Initializable {
         if (songPlaying < FolderLoader.musicFiles.size() - 1) {
             songPlaying++;
             music.change(FolderLoader.musicFiles.get(songPlaying));
-            //beginTimer();
         }
         else {
             songPlaying = 0;
@@ -236,7 +230,6 @@ public class UI implements Initializable {
     private void updateCurrentlyPlaying(int clickedIndex) {
         songPlaying = clickedIndex;
         music.change(FolderLoader.musicFiles.get(songPlaying));
-        beginTimer();
         pauseButton.setGraphic(playIcon);
         updateUIWithSound();
     }
