@@ -12,7 +12,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.9.1</junit.version>
-        <javafx.version>20</javafx.version>
+        <javafx.version>17</javafx.version>
     </properties>
 
     <dependencies>
@@ -83,8 +83,9 @@
         </dependency>
     </dependencies>
     <build>
-        <defaultGoal>exec:java</defaultGoal> <!-- package-->
+        <defaultGoal>clean package </defaultGoal> <!-- clean package / exec:java-->
         <plugins>
+            <!-- Maven Assembly Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -119,6 +120,7 @@
                     <target>8</target> <!-- Adjust based on your Java version -->
                 </configuration>
             </plugin>
+            <!-- Maven Exec Plugin -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>

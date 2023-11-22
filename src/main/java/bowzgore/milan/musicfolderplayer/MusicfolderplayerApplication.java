@@ -1,5 +1,6 @@
 package bowzgore.milan.musicfolderplayer;
 
+import bowzgore.milan.musicfolderplayer.rest.UI;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -24,17 +25,13 @@ public class MusicfolderplayerApplication extends Application{
         stage.getIcons().add(image);
         stage.setResizable(false);
         stage.setScene(scene);
+        UI controller = fxmlLoader.getController();
+
+        stage.setOnCloseRequest(event -> {
+            controller.StopApp();
+            Platform.exit();
+        });
         stage.show();
-    }
-
-    private static void simulateDynamicContentChange(Notifications notification) {
-        // Simulate changing content after 5 seconds
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
     }
 
     public static void main(String[] args) {

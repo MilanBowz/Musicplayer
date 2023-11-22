@@ -170,20 +170,20 @@ public class UI implements Initializable {
     public void browseMusic(ActionEvent event) {
         boolean change = FolderLoader.readFolder2(event);
         if(change){
-            songPlaying = 0;
-            ObservableList<String> observableSongs = FXCollections.observableArrayList(FolderLoader.musicFiles);
-            // Add data to the table
-            stringRecordsTable.setItems(observableSongs);
-            folderLabel.setText(FolderLoader.musicFolder);
-
-            if(music != null){
-                music.changeFolder(FolderLoader.musicFiles.get(songPlaying));
+            if(!FolderLoader.musicFiles.isEmpty()){
+                songPlaying = 0;
+                ObservableList<String> observableSongs = FXCollections.observableArrayList(FolderLoader.musicFiles);
+                // Add data to the table
+                stringRecordsTable.setItems(observableSongs);
+                folderLabel.setText(FolderLoader.musicFolder);
+                if(music != null){
+                    music.changeFolder(FolderLoader.musicFiles.get(songPlaying));
+                }
+                else {
+                    music = new Sound(FolderLoader.musicFiles.get(songPlaying));
+                }
+                updateUIWithSound();
             }
-            else {
-                music = new Sound(FolderLoader.musicFiles.get(songPlaying));
-            }
-
-            updateUIWithSound();
         }
     }
 
@@ -260,8 +260,15 @@ public class UI implements Initializable {
         timer.scheduleAtFixedRate(task, 0, 500);
     }
 
-    public void cancelTimer() {
-        //running = false;
+    public void StopApp() {
+        if (timer != null) {
+            timer.cancel();
+            timer.purge();
+        }
+        // Stop the sound
+        if (music != null) {
+            music.stopMusic();
+        }
     }
 
 

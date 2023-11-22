@@ -102,26 +102,7 @@ public class FolderLoader {
             }
         }
     }
-    private static void retrieveFirstFolder(File parentDirectory) {
-        // List all files and directories in the provided directory
-        File[] files = parentDirectory.listFiles();
-
-        // Filter out only directories
-        List<File> folderList = new ArrayList<>(Arrays.asList(files));
-
-        // Find the first directory
-        File firstFolder = folderList.stream()
-                .filter(File::isDirectory)
-                .findFirst()
-                .orElse(null);
-
-        // Check if a directory was found
-        if (firstFolder != null) {
-            System.out.println("First folder found: " + firstFolder.getAbsolutePath());
-        } else {
-            System.out.println("No folders found in: " + parentDirectory.getAbsolutePath());
-        }
-    }
+    // Method to list subdirectories of a given directory
     private static Preferences getPreferences() {
         // Retrieve the user preferences node for your application
         return Preferences.userNodeForPackage(FolderLoader.class);
