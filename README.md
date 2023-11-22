@@ -6,6 +6,6 @@ Music player that reads the .mp3 files of an folder
 - volume music in slider is working
 - coverart is shown when file is selected
 
-## .jar exucutable in /target 
+## .jar exucutable = musicfolderplayer.jar
 
 => pick the one with dependencies
