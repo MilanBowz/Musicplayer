@@ -7,3 +7,7 @@ Music player that reads the .mp3 files of an folder
 - coverart is shown when file is selected
 
 ## .jar exucutable = musicfolderplayer.jar
+
+java version = 8
+
+command execute => java -jar musicfolderplayer.jar;
