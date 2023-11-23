@@ -21,44 +21,6 @@ public class FolderLoader {
     // Define a key for the music folder preference
     public static final String MUSIC_FOLDER = "musicFolder";
     static List<String> musicFiles = new ArrayList<>();
-    public static List<String> readFolder() {
-        // Create a file chooser
-        JFileChooser fileChooser = new JFileChooser();
-
-        // Set the file chooser to open only directories
-        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-
-        // Show the dialog to select a directory
-        int result = fileChooser.showOpenDialog(null);
-
-        // Check if the user selected a directory
-        if (result == JFileChooser.APPROVE_OPTION) {
-            // Get the selected directory
-            File selectedDirectory = fileChooser.getSelectedFile();
-
-            // List the files in the selected directory
-            if (selectedDirectory.isDirectory()) {
-                System.out.println(selectedDirectory.getAbsolutePath());
-                File[] files = selectedDirectory.listFiles();
-                if (files != null) {
-                    System.out.println("Files in the selected directory:");
-                    for (File file : files) {
-                        System.out.println(file.getName());
-                        musicFiles.add(file.getName());
-                    }
-                }
-                else {
-                    System.out.println("No files in the selected directory.");
-                }
-            }
-            else {
-                System.out.println("Selected path is not a directory.");
-            }
-        } else {
-            System.out.println("User canceled the operation.");
-        }
-        return musicFiles;
-    }
 
     public static void readFolder2() {
         musicFolder = getMusicFolder();

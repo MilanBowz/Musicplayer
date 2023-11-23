@@ -30,6 +30,7 @@ public class MusicfolderplayerApplication extends Application{
         stage.setOnCloseRequest(event -> {
             controller.StopApp();
             Platform.exit();
+            System.exit(0);
         });
         stage.show();
     }

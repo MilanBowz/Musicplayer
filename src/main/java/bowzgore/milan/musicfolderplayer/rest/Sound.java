@@ -5,6 +5,7 @@ package bowzgore.milan.musicfolderplayer.rest;
 
 
 import javafx.event.EventHandler;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaErrorEvent;
 import javafx.scene.media.MediaPlayer;
@@ -14,6 +15,8 @@ import javafx.util.Duration;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -29,7 +32,7 @@ import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagException;
 import org.jaudiotagger.tag.datatype.Artwork;
 
-public class Sound extends Thread {
+public class Sound {
     private File filePlaying;
     private MediaPlayer mediaPlayer;
 
@@ -44,14 +47,22 @@ public class Sound extends Thread {
 
     public static Artwork coverArt;
 
+    private Timer timer;
+    private TimerTask task;
+
     // constructor to initialize streams and clip
-    public Sound(String filelocation) {
+    public Sound() {
+
+    }
+    // constructor to initialize streams and clip
+    public Sound(String filelocation,ProgressBar progressBar) {
         // create File object
         //initialize(null,null);
         filePlaying = new File(FolderLoader.musicFolder + filelocation).getAbsoluteFile();
         media = new Media(filePlaying.toURI().toString());
         mediaPlayer = new MediaPlayer(media);
         loadMetadata();
+        beginTimer(progressBar);
     }
     private void loadMetadata()  {
         disableJaudiotaggerLogs();
@@ -137,25 +148,34 @@ public class Sound extends Thread {
         paused = true;
     }
     public void stopMusic(){
+        timer.cancel();
+        timer.purge();
         mediaPlayer.stop();
         paused = true;
     }
 
     public double getEnd() {
-        return media.getDuration().toSeconds();
+        return media == null ? 0 : media.getDuration().toSeconds();
     }
 
-
-
-
     public double getCurrent() {
-        return mediaPlayer.getCurrentTime().toSeconds();
+        return mediaPlayer == null ? 0 : mediaPlayer.getCurrentTime().toSeconds();
     }
     public void setCurrent(double seconds) {
         if (mediaPlayer != null) {
             Duration duration = Duration.seconds(seconds);
             mediaPlayer.seek(duration);
         }
+    }
+
+    public void beginTimer(ProgressBar songProgressBar) {
+        timer = new Timer();
+        task = new TimerTask() {
+            public void run() {
+                songProgressBar.setProgress(getCurrent() / getEnd());
+            }
+        };
+        timer.scheduleAtFixedRate(task, 0, 500);
     }
 
 

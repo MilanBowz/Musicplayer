@@ -49,16 +49,11 @@ public class UI implements Initializable {
     @FXML
     private TableView<String> stringRecordsTable;
 
-    public Sound music ;
+    public Sound music;
 
     public int songPlaying = 0;
 
-    private Timer timer;
-    private TimerTask task;
-
     ImageView playIcon = new ImageView(new Image("pause.png"));
-
-
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -76,6 +71,7 @@ public class UI implements Initializable {
         playIcon.setFitHeight(40);
         playIcon.setFitWidth(40);
         playIcon.setPreserveRatio(true);
+
         /*
         for (int i = 0; i < speeds.length; i++) {
             speedBox.getItems().add(Integer.toString(speeds[i]) + "%");
@@ -85,7 +81,6 @@ public class UI implements Initializable {
         //imageView.setImage(image);
 
         /*speedBox.setOnAction(this::changeSpeed);*/
-        beginTimer();
 
         volumeSlider.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
@@ -131,7 +126,7 @@ public class UI implements Initializable {
         if(!Objects.equals(FolderLoader.getMusicFolder(), "")){
             FolderLoader.readFolder2();
             if(!FolderLoader.musicFiles.isEmpty()){
-                music = new Sound(FolderLoader.musicFiles.get(0));
+                music = new Sound(FolderLoader.musicFiles.get(0),songProgressBar);
                 ObservableList<String> observableSongs = FXCollections.observableArrayList(FolderLoader.musicFiles);
                 // Add data to the table
                 stringRecordsTable.setItems(observableSongs);
@@ -180,7 +175,7 @@ public class UI implements Initializable {
                     music.changeFolder(FolderLoader.musicFiles.get(songPlaying));
                 }
                 else {
-                    music = new Sound(FolderLoader.musicFiles.get(songPlaying));
+                    music = new Sound(FolderLoader.musicFiles.get(songPlaying),songProgressBar);
                 }
                 updateUIWithSound();
             }
@@ -242,29 +237,7 @@ public class UI implements Initializable {
         }*/
     }
 
-
-
-    public void closeApp() {
-        Platform.exit();
-        System.exit(0);
-    }
-    public void beginTimer() {
-        timer = new Timer();
-        task = new TimerTask() {
-            public void run() {
-                double current = music == null ? 0 : music.getCurrent();
-                double end = music == null ? 0 : music.getEnd();
-                songProgressBar.setProgress(current / end);
-            }
-        };
-        timer.scheduleAtFixedRate(task, 0, 500);
-    }
-
     public void StopApp() {
-        if (timer != null) {
-            timer.cancel();
-            timer.purge();
-        }
         // Stop the sound
         if (music != null) {
             music.stopMusic();
