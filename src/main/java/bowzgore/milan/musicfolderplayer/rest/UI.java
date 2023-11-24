@@ -119,6 +119,7 @@ public class UI implements Initializable {
                 });
             }
         });
+
         if(!Objects.equals(FolderLoader.getMusicFolder(), "")){
             FolderLoader.readFolder2();
             if(!FolderLoader.musicFiles.isEmpty()){
@@ -130,6 +131,19 @@ public class UI implements Initializable {
                 updateUIWithSound();
             }
         }
+        songProgressBar.valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                if(songProgressBar.isPressed()){
+                    music.changeOnce = true;
+                }
+                if(!music.changeOnce) {
+                    String style = String.format("-fx-background-color: linear-gradient(to right, #2D819D %d%%, #969696 %d%%);",
+                            newValue.intValue()+1, newValue.intValue()+1);
+                    songProgressBar.lookup(".track").setStyle(style);
+                }
+            }
+        });
 
     }
 
