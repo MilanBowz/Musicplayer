@@ -24,6 +24,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.event.EventHandler;
+import javafx.scene.layout.Region;
 import org.jaudiotagger.tag.datatype.Artwork;
 
 
@@ -31,6 +32,8 @@ public class UI implements Initializable {
 
     @FXML
     public Label folderLabel;
+    @FXML
+    public Region progressOverlay;
     @FXML
     private Pane pane;
     @FXML
@@ -42,7 +45,7 @@ public class UI implements Initializable {
     @FXML
     private Slider volumeSlider;
     @FXML
-    private ProgressBar songProgressBar;
+    private Slider songProgressBar;
     @FXML
     private ImageView imageView;
 
@@ -89,15 +92,7 @@ public class UI implements Initializable {
             }
 
         });
-        // Add an event handler to the ProgressBar for seeking
-        songProgressBar.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
-            @Override
-            public void handle(javafx.scene.input.MouseEvent mouseEvent) {
-                double totalDuration = music.getEnd();
-                double seekTime = mouseEvent.getX() / songProgressBar.getWidth() * totalDuration;
-                music.setCurrent(seekTime);
-            }
-        });
+
         // Set up the table
         stringRecordsTable.setRowFactory(tv -> new TableRow<String>() {
             @Override

@@ -21,6 +21,7 @@ public class MusicfolderplayerApplication extends Application{
         Image image = new Image("Icon.png");
 
         Scene scene = new Scene(fxmlLoader.load(), 800, 600);
+        scene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
         stage.setTitle("MFP (Music Folder Player)");
         stage.getIcons().add(image);
         stage.setResizable(false);

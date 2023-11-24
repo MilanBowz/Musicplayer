@@ -4,8 +4,12 @@ package bowzgore.milan.musicfolderplayer.rest;
 // https://www.youtube.com/watch?v=Ope4icw6bVk
 
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.Slider;
+import javafx.scene.layout.Region;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaErrorEvent;
 import javafx.scene.media.MediaPlayer;
@@ -48,14 +52,17 @@ public class Sound {
     public static Artwork coverArt;
 
     private Timer timer;
-    private TimerTask task;
+    private TimerTask task ;
+
+    boolean changeOnce = false;
+
 
     // constructor to initialize streams and clip
     public Sound() {
 
     }
     // constructor to initialize streams and clip
-    public Sound(String filelocation,ProgressBar progressBar) {
+    public Sound(String filelocation, Slider progressBar) {
         // create File object
         //initialize(null,null);
         filePlaying = new File(FolderLoader.musicFolder + filelocation).getAbsoluteFile();
@@ -63,6 +70,18 @@ public class Sound {
         mediaPlayer = new MediaPlayer(media);
         loadMetadata();
         beginTimer(progressBar);
+        progressBar.valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                if(progressBar.isPressed()){
+                    changeOnce = true;
+                }
+                String style = String.format("-fx-background-color: linear-gradient(to right, #2D819D %d%%, #969696 %d%%);",
+                        oldValue.intValue(), oldValue.intValue());
+                progressBar.lookup(".track").setStyle(style);
+
+            }
+        });
     }
     private void loadMetadata()  {
         disableJaudiotaggerLogs();
@@ -161,21 +180,33 @@ public class Sound {
     public double getCurrent() {
         return mediaPlayer == null ? 0 : mediaPlayer.getCurrentTime().toSeconds();
     }
-    public void setCurrent(double seconds) {
-        if (mediaPlayer != null) {
-            Duration duration = Duration.seconds(seconds);
-            mediaPlayer.seek(duration);
-        }
-    }
 
-    public void beginTimer(ProgressBar songProgressBar) {
+    public void beginTimer(Slider progressBar) {
         timer = new Timer();
         task = new TimerTask() {
+            double value;
+            double percentage = 0;
             public void run() {
-                songProgressBar.setProgress(getCurrent() / getEnd());
+                System.out.println(progressBar.isPressed() + " " + changeOnce);
+                if(!changeOnce){
+                    value = (getCurrent() / getEnd()) *100;
+                    //System.out.println(value);
+                    // This change was not initiated by the user (programmatic change)
+                    progressBar.setValue(value);
+                }
+                else if(!progressBar.isPressed()){
+                    percentage = (progressBar.getValue()/progressBar.getMax());
+                    value =  percentage * getEnd();
+                    setCurrent(value);
+                    changeOnce = false;
+                }
             }
         };
-        timer.scheduleAtFixedRate(task, 0, 500);
+        timer.scheduleAtFixedRate(task, 0, 250);
+    }
+    // Method to pause the timer
+    public void setCurrent(double seconds) {
+        mediaPlayer.seek(Duration.seconds(seconds));
     }
 
 

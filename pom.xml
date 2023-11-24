@@ -83,7 +83,7 @@
         </dependency>
     </dependencies>
     <build>
-        <defaultGoal>  exec:java </defaultGoal> <!-- clean package  / exec:java-->
+        <defaultGoal> clean package </defaultGoal> <!-- clean package  / exec:java-->
         <plugins>
             <!-- Maven Assembly Plugin -->
             <plugin>
