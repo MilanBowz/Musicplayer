@@ -67,9 +67,10 @@ public class UI implements Initializable {
 
         // Set up the table columns
         recordsColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue()));
-
+        recordsColumn.setReorderable(false);
         // Add columns to the table
         stringRecordsTable.getColumns().add(recordsColumn);
+
 
         playIcon.setFitHeight(40);
         playIcon.setFitWidth(40);
@@ -121,11 +122,11 @@ public class UI implements Initializable {
         if(!Objects.equals(FolderLoader.getMusicFolder(), "")){
             FolderLoader.readFolder2();
             if(!FolderLoader.musicFiles.isEmpty()){
-                music = new Sound(FolderLoader.musicFiles.get(0),songProgressBar);
                 ObservableList<String> observableSongs = FXCollections.observableArrayList(FolderLoader.musicFiles);
                 // Add data to the table
                 stringRecordsTable.setItems(observableSongs);
                 folderLabel.setText(FolderLoader.musicFolder);
+                music = new Sound(FolderLoader.musicFiles.get(0),songProgressBar);
                 updateUIWithSound();
             }
         }

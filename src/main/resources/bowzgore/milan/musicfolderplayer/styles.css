@@ -16,10 +16,7 @@
     -fx-padding: 0.25em; /* 3
 }*/
 
-.custom-slider .track{
-    -progress : 0.2;
-    -fx-background-color: linear-gradient(to right, #2D819D -progress, #969696 -progress);
-}
+
 
 .custom-slider .thumb {
     -fx-background-color: darkblue;

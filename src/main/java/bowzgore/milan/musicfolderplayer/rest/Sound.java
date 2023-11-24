@@ -65,23 +65,26 @@ public class Sound {
     public Sound(String filelocation, Slider progressBar) {
         // create File object
         //initialize(null,null);
+        beginTimer(progressBar);
+
         filePlaying = new File(FolderLoader.musicFolder + filelocation).getAbsoluteFile();
         media = new Media(filePlaying.toURI().toString());
         mediaPlayer = new MediaPlayer(media);
-        loadMetadata();
-        beginTimer(progressBar);
+
         progressBar.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                 if(progressBar.isPressed()){
                     changeOnce = true;
                 }
-                String style = String.format("-fx-background-color: linear-gradient(to right, #2D819D %d%%, #969696 %d%%);",
-                        oldValue.intValue(), oldValue.intValue());
-                progressBar.lookup(".track").setStyle(style);
-
+                if(!changeOnce) {
+                    String style = String.format("-fx-background-color: linear-gradient(to right, #2D819D %d%%, #969696 %d%%);",
+                            newValue.intValue()+1, newValue.intValue()+1);
+                    progressBar.lookup(".track").setStyle(style);
+                }
             }
         });
+        loadMetadata();
     }
     private void loadMetadata()  {
         disableJaudiotaggerLogs();
@@ -187,18 +190,19 @@ public class Sound {
             double value;
             double percentage = 0;
             public void run() {
-                System.out.println(progressBar.isPressed() + " " + changeOnce);
-                if(!changeOnce){
-                    value = (getCurrent() / getEnd()) *100;
-                    //System.out.println(value);
-                    // This change was not initiated by the user (programmatic change)
-                    progressBar.setValue(value);
-                }
-                else if(!progressBar.isPressed()){
-                    percentage = (progressBar.getValue()/progressBar.getMax());
-                    value =  percentage * getEnd();
-                    setCurrent(value);
-                    changeOnce = false;
+                if(!progressBar.isPressed()){
+                    if (changeOnce) {
+                        percentage = (progressBar.getValue()/progressBar.getMax());
+                        value =  percentage * getEnd();
+                        setCurrent(value);
+                        changeOnce = false;
+                    }
+                    else {
+                        value = (getCurrent() / getEnd()) *100;
+                        //System.out.println(value);
+                        // This change was not initiated by the user (programmatic change)
+                        progressBar.setValue(value);
+                    }
                 }
             }
         };
