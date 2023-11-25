@@ -106,6 +106,9 @@ public class UI implements Initializable {
                     if(getIndex() == songPlaying){
                         setStyle("-fx-background-color: darkblue;-fx-text-fill: white;");
                     }
+                    else {
+                        setStyle("-fx-text-fill: white;");
+                    }
                 }
                 {
                 // Add an event handler to the row
