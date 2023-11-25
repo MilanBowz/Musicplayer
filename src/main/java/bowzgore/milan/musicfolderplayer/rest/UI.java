@@ -63,13 +63,16 @@ public class UI implements Initializable {
         // Set up the table columns
         TableColumn<String, String> recordsColumn = new TableColumn<>("Records");
         recordsColumn.setPrefWidth(400);
-        recordsColumn.setCellValueFactory(new PropertyValueFactory<>(""));
 
         // Set up the table columns
         recordsColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue()));
-        recordsColumn.setReorderable(false);
+        recordsColumn.setSortType(TableColumn.SortType.ASCENDING);
+        recordsColumn.sortableProperty().setValue(false);
         // Add columns to the table
         stringRecordsTable.getColumns().add(recordsColumn);
+        stringRecordsTable.setTableMenuButtonVisible(false);
+        stringRecordsTable.setContextMenu(null);
+
 
 
         playIcon.setFitHeight(40);
@@ -96,13 +99,13 @@ public class UI implements Initializable {
 
         // Set up the table
         stringRecordsTable.setRowFactory(tv -> new TableRow<String>() {
-            @Override
-            public void updateItem(String item, boolean empty) {
+                @Override
+                public void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
                 // Set the background color for a specific row
 
                 if (getIndex() == songPlaying) {
-                    setStyle("-fx-background-color: lightblue;-fx-color: black;");
+                    setStyle("-fx-background-color: darkblue;");
                 } else {
                     setStyle("");
                 }

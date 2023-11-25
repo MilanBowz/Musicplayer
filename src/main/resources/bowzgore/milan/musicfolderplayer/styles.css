@@ -15,7 +15,26 @@
     -fx-background-radius: 0.25em, 0.25em, 0.166667em; 3 3 2
     -fx-padding: 0.25em; /* 3
 }*/
+/* Customize row background color */
+/* Customize column header background */
+.table-view {
+    -fx-control-inner-background: black;
+    -fx-background-color: black;
+    -fx-text-fill: white;
+}
+.table-view .column-header {
+    -fx-background-color: black;
+    -fx-text-fill: white;
+    -fx-opacity: 0.9;
+}
 
+.table-row-cell {
+    -fx-background-color: black;
+    -fx-text-fill: white;
+    -fx-border-color: #1E1E1E;
+    -fx-border-width: 0 0 1 0;
+    -fx-border-style: solid;
+}
 
 
 .custom-slider .thumb {
