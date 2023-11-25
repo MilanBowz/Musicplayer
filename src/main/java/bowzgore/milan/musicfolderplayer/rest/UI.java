@@ -22,6 +22,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
 import javafx.event.EventHandler;
 import javafx.scene.layout.Region;
@@ -61,7 +63,7 @@ public class UI implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // Set up the table columns
-        TableColumn<String, String> recordsColumn = new TableColumn<>("Records");
+        TableColumn<String, String> recordsColumn = new TableColumn<>();
         recordsColumn.setPrefWidth(400);
 
         // Set up the table columns
@@ -72,8 +74,6 @@ public class UI implements Initializable {
         stringRecordsTable.getColumns().add(recordsColumn);
         stringRecordsTable.setTableMenuButtonVisible(false);
         stringRecordsTable.setContextMenu(null);
-
-
 
         playIcon.setFitHeight(40);
         playIcon.setFitWidth(40);
@@ -101,16 +101,13 @@ public class UI implements Initializable {
         stringRecordsTable.setRowFactory(tv -> new TableRow<String>() {
                 @Override
                 public void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-                // Set the background color for a specific row
-
-                if (getIndex() == songPlaying) {
-                    setStyle("-fx-background-color: darkblue;");
-                } else {
-                    setStyle("");
+                // Set the background color for a specific ro
+                    super.updateItem(item,empty);
+                    if(getIndex() == songPlaying){
+                        setStyle("-fx-background-color: darkblue;-fx-text-fill: white;");
+                    }
                 }
-            }
-            {
+                {
                 // Add an event handler to the row
                 setOnMouseClicked(event -> {
                     if (!isEmpty() && event.getButton() == MouseButton.PRIMARY) {
@@ -120,7 +117,7 @@ public class UI implements Initializable {
                         updateUIWithSound();
                     }
                 });
-            }
+                }
         });
 
         if(!Objects.equals(FolderLoader.getMusicFolder(), "")){

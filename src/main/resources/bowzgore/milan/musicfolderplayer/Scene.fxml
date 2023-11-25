@@ -60,13 +60,13 @@
 
 
     <ComboBox fx:id="speedBox" layoutX="150.0" layoutY="550.0" prefHeight="50.0" prefWidth="50.0" promptText="100%"/>
-    <Slider fx:id="volumeSlider" layoutX="650.0" layoutY="575.0" orientation="HORIZONTAL" prefHeight="14.0"
+    <Slider fx:id="volumeSlider" layoutX="650.0" layoutY="575.0" orientation="HORIZONTAL" prefHeight="40.0"
             prefWidth="100.0" style="-fx-accent: red; -fx-background-radius: 20px;" value="100.0"/>
 
 
     <!-- TableView for String Records -->
     <Label fx:id="folderLabel" layoutX="400.0" layoutY="0.0" prefHeight="10.0" prefWidth="400.0" style="-fx-text-fill: white;">here is the folder</Label>
-    <TableView fx:id="stringRecordsTable" layoutX="400.0" layoutY="20.0" prefHeight="425.0" prefWidth="400.0">
+    <TableView fx:id="stringRecordsTable" layoutX="400.0" layoutY="20.0" prefHeight="425.0" prefWidth="400.0" >
         <columns>
         </columns>
     </TableView>

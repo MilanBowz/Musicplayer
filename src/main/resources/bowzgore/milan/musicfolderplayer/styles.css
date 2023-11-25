@@ -1,22 +1,4 @@
-/* Add your styles here */
-/* Add your styles here */
 
-/*.custom-slider .track {
-      -fx-background-color:
-          -fx-shadow-highlight-color,
-          linear-gradient(to bottom, derive(-fx-text-box-border, -10%), -fx-text-box-border),
-          linear-gradient(to bottom,
-            derive(-fx-control-inner-background, -9%),
-            derive(-fx-control-inner-background, 0%),
-            derive(-fx-control-inner-background, -5%),
-            derive(-fx-control-inner-background, -12%)
-          );
-    -fx-background-insets: 0 0 -1 0, 0, 1;
-    -fx-background-radius: 0.25em, 0.25em, 0.166667em; 3 3 2
-    -fx-padding: 0.25em; /* 3
-}*/
-/* Customize row background color */
-/* Customize column header background */
 .table-view {
     -fx-control-inner-background: black;
     -fx-background-color: black;
@@ -25,9 +7,7 @@
 .table-view .column-header {
     -fx-background-color: black;
     -fx-text-fill: white;
-    -fx-opacity: 0.9;
 }
-
 .table-row-cell {
     -fx-background-color: black;
     -fx-text-fill: white;
@@ -35,6 +15,7 @@
     -fx-border-width: 0 0 1 0;
     -fx-border-style: solid;
 }
+
 
 
 .custom-slider .thumb {
