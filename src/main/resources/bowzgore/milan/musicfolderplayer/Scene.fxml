@@ -43,7 +43,6 @@
         </graphic>
     </Button>
 
-    <ComboBox fx:id="speedBox" layoutX="150.0" layoutY="550.0" prefHeight="50.0" prefWidth="50.0" promptText="100%"/>
     <Slider fx:id="volumeSlider" layoutX="650.0" layoutY="550.0" orientation="HORIZONTAL" prefHeight="40.0"
             prefWidth="100.0" style="-fx-accent: red; -fx-background-radius: 20px;" value="100.0"/>
 
@@ -66,6 +65,7 @@
     <Button mnemonicParsing="false" onAction="#browseMusic" prefHeight="50.0"
             prefWidth="100.0" text="Browse" textFill="BLACK">
     </Button>
+
 
     <ImageView fx:id="imageView" fitHeight="375.0" fitWidth="400.0" layoutX="0.0" layoutY="75.0" pickOnBounds="true" preserveRatio="true">
     </ImageView>

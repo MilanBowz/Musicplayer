@@ -37,9 +37,9 @@ public class UI implements Initializable {
     @FXML
     public Label folderLabel;
     @FXML
-    public Region progressOverlay;
+    public Button nextPlaylistButton;
     @FXML
-    private Pane pane;
+    public Button previousPlaylistButton;
     @FXML
     private Label songLabel;
     @FXML
@@ -156,22 +156,21 @@ public class UI implements Initializable {
     public void handleKeyPress(javafx.scene.input.KeyEvent event) {
         // Get the key code of the pressed key
         KeyCode keyCode = event.getCode();
-
         // Check for Space or Enter key
         if (keyCode == KeyCode.SPACE || keyCode == KeyCode.ENTER) {
             play();
         }
-        else if (keyCode == KeyCode.N) {
+        else if (keyCode == KeyCode.DIGIT2 | keyCode == KeyCode.NUMPAD2) {
             nextMedia();
         }
-        else if (keyCode == KeyCode.P) {
+        else if (keyCode == KeyCode.DIGIT1 | keyCode == KeyCode.NUMPAD1) {
             previousMedia();
         }
-        else if (keyCode == KeyCode.DOWN) {
-            music.changeVolume(volumeSlider.getValue()-5);
+        else if (keyCode == KeyCode.ADD) {
+            volumeSlider.setValue(volumeSlider.getValue()+5);
         }
-        else if (keyCode == KeyCode.UP) {
-            music.changeVolume(volumeSlider.getValue()+5);
+        else if (keyCode == KeyCode.SUBTRACT) {
+            volumeSlider.setValue(volumeSlider.getValue()-5);
         }
     }
 
@@ -282,7 +281,4 @@ public class UI implements Initializable {
             music.stopMusic();
         }
     }
-
-
-
 }

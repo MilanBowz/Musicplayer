@@ -18,6 +18,7 @@ import java.util.prefs.Preferences;
 public class FolderLoader {
 
     public static String musicFolder = "";
+
     // Define a key for the music folder preference
     public static final String MUSIC_FOLDER = "musicFolder";
     static List<String> musicFiles = new ArrayList<>();
@@ -57,7 +58,9 @@ public class FolderLoader {
     private static void retrieveMP3Files(File folder) {
         if (folder.isDirectory()) {
             File[] files = folder.listFiles((dir, name) -> name.toLowerCase().endsWith(".mp3"));
-            if (files != null) {
+
+            if (files != null && files.length>0) {
+                System.out.println(files.length);
                 for (File file : files) {
                     musicFiles.add(file.getName());
                 }
