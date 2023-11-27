@@ -12,7 +12,9 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.9.1</junit.version>
-        <javafx.version>17</javafx.version>
+        <javafx.version>21</javafx.version>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
     </properties>
 
     <dependencies>
@@ -82,81 +84,12 @@
             <version>11.1.2</version>
         </dependency>
     </dependencies>
+
+
     <build>
         <defaultGoal> clean package </defaultGoal> <!-- clean package  / exec:java-->
         <plugins>
-            <!-- Maven Assembly Plugin -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.1.1</version> <!-- Use the version you have or the latest version -->
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>bowzgore.milan.musicfolderplayer.MusicfolderplayerApplication</mainClass>
-                        </manifest>
-                    </archive>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>make-assembly</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <!-- Maven Compiler Plugin -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.11.0</version>
-            </plugin>
-            <!-- Maven Exec Plugin -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>3.1.1</version> <!-- Use the version you have -->
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>java</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <mainClass>bowzgore.milan.musicfolderplayer.MusicfolderplayerApplication</mainClass>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.openjfx</groupId>
-                <artifactId>javafx-maven-plugin</artifactId>
-                <version>0.0.8</version>
-                <executions>
-                    <execution>
-                        <!-- Default configuration for running with: mvn clean javafx:run -->
-                        <id>default-cli</id>
-                        <configuration>
-                            <mainClass>bowzgore.milan.musicfolderplayer.MusicfolderplayerApplication
-                            </mainClass>
-                            <launcher>app</launcher>
-                            <jlinkZipName>app</jlinkZipName>
-                            <jlinkImageName>app</jlinkImageName>
-                            <noManPages>true</noManPages>
-                            <stripDebug>true</stripDebug>
-                            <noHeaderFiles>true</noHeaderFiles>
-                        </configuration>
-                    </execution>
-                </executions>
-                <configuration>
-                    <mainClass>bowzgore.milan.musicfolderplayer.MusicfolderplayerApplication</mainClass>
-                </configuration>
-            </plugin>
-        </plugins>
 
+        </plugins>
     </build>
 </project>

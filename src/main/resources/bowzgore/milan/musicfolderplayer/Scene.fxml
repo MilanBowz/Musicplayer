@@ -12,38 +12,23 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.layout.Region?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/10.0.1"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="bowzgore.milan.musicfolderplayer.rest.UI" style="-fx-background-color:black">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8.0.391"
+          fx:id="pane"  xmlns:fx="http://javafx.com/fxml/1" fx:controller="bowzgore.milan.musicfolderplayer.rest.UI" style="-fx-background-color:black">
 
-    <Button mnemonicParsing="false" onAction="#browseMusic" prefHeight="50.0"
-            prefWidth="100.0" text="Browse" textFill="BLACK">
-    </Button>
-
-    <ImageView fx:id="imageView" fitHeight="375.0" fitWidth="400.0" layoutX="0.0" layoutY="75.0" pickOnBounds="true" preserveRatio="true">
-    </ImageView>
-
-    <Label fx:id="songLabel" layoutY="470.0" prefWidth="800.0" textAlignment="CENTER" alignment="CENTER" style="-fx-text-fill: white;">
-        <font>
-            <Font size="20"  />
-        </font>
-    </Label>
-    <Slider fx:id="songProgressBar" layoutX="0.0" layoutY="500.0" orientation="HORIZONTAL"
-            prefHeight="40.0" prefWidth="800.0" styleClass="custom-slider">    </Slider>
-
-    <Button fx:id="previousButton" layoutX="325.0" layoutY="550.0" mnemonicParsing="false" onAction="#previousMedia" prefHeight="50.0" prefWidth="50.0" style="-fx-background-color: BLACK">
-        <graphic>
-            <ImageView fitHeight="40" fitWidth="40" preserveRatio="true">
-                <image>
-                    <Image url="back.png" />
-                </image>
-            </ImageView>
-        </graphic>
-    </Button>
     <Button fx:id="pauseButton" layoutX="375.0" layoutY="550.0" onAction="#play" prefHeight="50.0" prefWidth="50.0" style="-fx-background-color: BLACK">
         <graphic>
             <ImageView fitHeight="40" fitWidth="40" preserveRatio="true">
                 <image>
                     <Image url="pause.png" />
+                </image>
+            </ImageView>
+        </graphic>
+    </Button>
+    <Button fx:id="previousButton" layoutX="325.0" layoutY="550.0" mnemonicParsing="false" onAction="#previousMedia" prefHeight="50.0" prefWidth="50.0" style="-fx-background-color: BLACK">
+        <graphic>
+            <ImageView fitHeight="40" fitWidth="40" preserveRatio="true">
+                <image>
+                    <Image url="back.png" />
                 </image>
             </ImageView>
         </graphic>
@@ -58,10 +43,17 @@
         </graphic>
     </Button>
 
-
     <ComboBox fx:id="speedBox" layoutX="150.0" layoutY="550.0" prefHeight="50.0" prefWidth="50.0" promptText="100%"/>
-    <Slider fx:id="volumeSlider" layoutX="650.0" layoutY="575.0" orientation="HORIZONTAL" prefHeight="40.0"
+    <Slider fx:id="volumeSlider" layoutX="650.0" layoutY="550.0" orientation="HORIZONTAL" prefHeight="40.0"
             prefWidth="100.0" style="-fx-accent: red; -fx-background-radius: 20px;" value="100.0"/>
+
+    <Slider fx:id="songProgressBar" layoutX="0.0" layoutY="500.0" orientation="HORIZONTAL"
+            prefHeight="40.0" prefWidth="800.0" styleClass="custom-slider">    </Slider>
+    <Label fx:id="songLabel" layoutY="470.0" prefWidth="800.0" textAlignment="CENTER" alignment="CENTER" style="-fx-text-fill: white;">
+        <font>
+            <Font size="20"  />
+        </font>
+    </Label>
 
 
     <!-- TableView for String Records -->
@@ -70,6 +62,13 @@
         <columns>
         </columns>
     </TableView>
+
+    <Button mnemonicParsing="false" onAction="#browseMusic" prefHeight="50.0"
+            prefWidth="100.0" text="Browse" textFill="BLACK">
+    </Button>
+
+    <ImageView fx:id="imageView" fitHeight="375.0" fitWidth="400.0" layoutX="0.0" layoutY="75.0" pickOnBounds="true" preserveRatio="true">
+    </ImageView>
 
 
 </AnchorPane>

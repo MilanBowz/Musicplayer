@@ -1,4 +1,5 @@
 package bowzgore.milan.musicfolderplayer.rest;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -8,6 +9,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 
 import java.util.*;
@@ -41,7 +43,7 @@ public class UI implements Initializable {
     @FXML
     private Label songLabel;
     @FXML
-    private Button playButton, pauseButton, resetButton, previousButton, nextButton;
+    private Button pauseButton, resetButton, previousButton, nextButton;
     @FXML
     private ComboBox<String> speedBox;
     @FXML
@@ -78,6 +80,7 @@ public class UI implements Initializable {
         playIcon.setFitHeight(40);
         playIcon.setFitWidth(40);
         playIcon.setPreserveRatio(true);
+
 
         /*
         for (int i = 0; i < speeds.length; i++) {
@@ -149,6 +152,29 @@ public class UI implements Initializable {
         });
 
     }
+
+    public void handleKeyPress(javafx.scene.input.KeyEvent event) {
+        // Get the key code of the pressed key
+        KeyCode keyCode = event.getCode();
+
+        // Check for Space or Enter key
+        if (keyCode == KeyCode.SPACE || keyCode == KeyCode.ENTER) {
+            play();
+        }
+        else if (keyCode == KeyCode.N) {
+            nextMedia();
+        }
+        else if (keyCode == KeyCode.P) {
+            previousMedia();
+        }
+        else if (keyCode == KeyCode.DOWN) {
+            music.changeVolume(volumeSlider.getValue()-5);
+        }
+        else if (keyCode == KeyCode.UP) {
+            music.changeVolume(volumeSlider.getValue()+5);
+        }
+    }
+
 
     private void updateUIWithSound()  {
         // Update other UI elements as needed

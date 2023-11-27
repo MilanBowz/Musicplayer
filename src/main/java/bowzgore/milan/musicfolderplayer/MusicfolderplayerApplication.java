@@ -8,9 +8,11 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import org.controlsfx.control.Notifications;
 
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 
 public class MusicfolderplayerApplication extends Application{
@@ -19,6 +21,7 @@ public class MusicfolderplayerApplication extends Application{
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(MusicfolderplayerApplication.class.getResource("Scene.fxml"));
         Image image = new Image("Icon.png");
+
 
         Scene scene = new Scene(fxmlLoader.load(), 800, 600);
         scene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
@@ -34,7 +37,12 @@ public class MusicfolderplayerApplication extends Application{
             System.exit(0);
         });
         stage.show();
+
+        scene.setOnKeyPressed(controller::handleKeyPress);
+
     }
+
+
 
     public static void main(String[] args) {
         launch();
