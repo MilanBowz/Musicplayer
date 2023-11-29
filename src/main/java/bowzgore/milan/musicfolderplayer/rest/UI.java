@@ -64,6 +64,10 @@ public class UI implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        if(!Objects.equals(FolderLoader.getMusicFolder(), "")){
+            FolderLoader.readFolder2();
+            this.initFolder();
+        }
         // Set up the table columns
         TableColumn<String, String> recordsColumn = new TableColumn<>();
         recordsColumn.setPrefWidth(400);
@@ -125,18 +129,6 @@ public class UI implements Initializable {
                 });
                 }
         });
-
-        if(!Objects.equals(FolderLoader.getMusicFolder(), "")){
-            FolderLoader.readFolder2();
-            if(!FolderLoader.musicFiles.isEmpty()){
-                ObservableList<String> observableSongs = FXCollections.observableArrayList(FolderLoader.musicFiles);
-                // Add data to the table
-                stringRecordsTable.setItems(observableSongs);
-                folderLabel.setText(FolderLoader.musicFolder);
-                music = new Sound(FolderLoader.musicFiles.get(0),songProgressBar);
-                updateUIWithSound();
-            }
-        }
         songProgressBar.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -280,5 +272,31 @@ public class UI implements Initializable {
         if (music != null) {
             music.stopMusic();
         }
+    }
+    public void initFolder(){
+        if(!FolderLoader.musicFiles.isEmpty()){
+            songPlaying = 0;
+            ObservableList<String> observableSongs = FXCollections.observableArrayList(FolderLoader.musicFiles);
+            // Add data to the table
+            stringRecordsTable.setItems(observableSongs);
+            folderLabel.setText(FolderLoader.musicFolder);
+            if(music != null){
+                music.changeFolder(FolderLoader.musicFiles.get(songPlaying));
+            }
+            else {
+                music = new Sound(FolderLoader.musicFiles.get(songPlaying),songProgressBar);
+            }
+            updateUIWithSound();
+        }
+    }
+
+    public void previousList(ActionEvent actionEvent) {
+        FolderLoader.previousFolder();
+        initFolder();
+    }
+
+    public void nextList(ActionEvent actionEvent) {
+        FolderLoader.nextFolder();
+        initFolder();
     }
 }
