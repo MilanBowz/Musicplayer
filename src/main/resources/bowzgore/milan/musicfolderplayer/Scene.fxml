@@ -19,7 +19,7 @@
         <graphic>
             <ImageView fitHeight="40" fitWidth="40" preserveRatio="true">
                 <image>
-                    <Image url="pause.png" />
+                    <Image url="play.png" />
                 </image>
             </ImageView>
         </graphic>

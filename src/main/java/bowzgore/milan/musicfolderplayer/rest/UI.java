@@ -191,10 +191,10 @@ public class UI implements Initializable {
             }
         }
         if(Sound.paused){
-            playIcon.setImage(new Image("pause.png"));
+            playIcon.setImage(new Image("play.png"));
         }
         else {
-            playIcon.setImage(new Image("play.png"));
+            playIcon.setImage(new Image("pause.png"));
             music.changeVolume(volumeSlider.getValue());
         }
     }
