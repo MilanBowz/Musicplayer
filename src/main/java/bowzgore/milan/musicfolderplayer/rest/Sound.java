@@ -70,6 +70,7 @@ public class Sound {
         filePlaying = new File(FolderLoader.musicFolder + filelocation).getAbsoluteFile();
         media = new Media(filePlaying.toURI().toString());
         mediaPlayer = new MediaPlayer(media);
+        barInit(progressBar);
         loadMetadata();
     }
     private void loadMetadata()  {
@@ -170,6 +171,21 @@ public class Sound {
         return mediaPlayer == null ? 0 : mediaPlayer.getCurrentTime().toSeconds();
     }
 
+    public void barInit(Slider progressBar){
+        progressBar.valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                if(progressBar.isPressed()){
+                    changeOnce = true;
+                }
+                if(!changeOnce) {
+                    String style = String.format("-fx-background-color: linear-gradient(to right, #2D819D %d%%, #969696 %d%%);",
+                            newValue.intValue()+1, newValue.intValue()+1);
+                    progressBar.lookup(".track").setStyle(style);
+                }
+            }
+        });
+    }
     public void beginTimer(Slider progressBar) {
         timer = new Timer();
         task = new TimerTask() {

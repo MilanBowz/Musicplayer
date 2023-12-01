@@ -29,6 +29,7 @@ public class MusicfolderplayerApplication extends Application{
         stage.getIcons().add(image);
         stage.setResizable(false);
         stage.setScene(scene);
+        stage.show();
         UI controller = fxmlLoader.getController();
 
         stage.setOnCloseRequest(event -> {
@@ -36,7 +37,6 @@ public class MusicfolderplayerApplication extends Application{
             Platform.exit();
             System.exit(0);
         });
-        stage.show();
 
         scene.setOnKeyPressed(controller::handleKeyPress);
 

@@ -60,18 +60,17 @@ public class UI implements Initializable {
 
     public int songPlaying = 0;
 
-    ImageView playIcon = new ImageView(new Image("pause.png"));
+    ImageView playIcon = new ImageView(new Image("play.png"));
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         if(!Objects.equals(FolderLoader.getMusicFolder(), "")){
-            FolderLoader.readFolder2();
+            FolderLoader.readFolderInit();
             this.initFolder();
         }
         // Set up the table columns
         TableColumn<String, String> recordsColumn = new TableColumn<>();
         recordsColumn.setPrefWidth(400);
-
         // Set up the table columns
         recordsColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue()));
         recordsColumn.setSortType(TableColumn.SortType.ASCENDING);
@@ -84,7 +83,6 @@ public class UI implements Initializable {
         playIcon.setFitHeight(40);
         playIcon.setFitWidth(40);
         playIcon.setPreserveRatio(true);
-
 
         /*
         for (int i = 0; i < speeds.length; i++) {
@@ -129,20 +127,6 @@ public class UI implements Initializable {
                 });
                 }
         });
-        songProgressBar.valueProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                if(songProgressBar.isPressed()){
-                    music.changeOnce = true;
-                }
-                if(!music.changeOnce) {
-                    String style = String.format("-fx-background-color: linear-gradient(to right, #2D819D %d%%, #969696 %d%%);",
-                            newValue.intValue()+1, newValue.intValue()+1);
-                    songProgressBar.lookup(".track").setStyle(style);
-                }
-            }
-        });
-
     }
 
     public void handleKeyPress(javafx.scene.input.KeyEvent event) {
@@ -193,13 +177,12 @@ public class UI implements Initializable {
 
 
     public void browseMusic(ActionEvent event) {
-        boolean change = FolderLoader.readFolder2(event);
-        if(change){
+        if(FolderLoader.readFolderBrowse(event)){
             if(!FolderLoader.musicFiles.isEmpty()){
                 songPlaying = 0;
-                ObservableList<String> observableSongs = FXCollections.observableArrayList(FolderLoader.musicFiles);
+                //ObservableList<String> observableSongs = FXCollections.observableArrayList(FolderLoader.musicFiles);
                 // Add data to the table
-                stringRecordsTable.setItems(observableSongs);
+                stringRecordsTable.setItems(FolderLoader.musicFiles);
                 folderLabel.setText(FolderLoader.musicFolder);
                 if(music != null){
                     music.changeFolder(FolderLoader.musicFiles.get(songPlaying));
@@ -259,14 +242,6 @@ public class UI implements Initializable {
         updateUIWithSound();
     }
 
-    public void changeSpeed(ActionEvent event) {
-        /*if (speedBox.getValue() == null) {
-            mediaPlayer.setRate(1);
-        } else {
-            mediaPlayer.setRate(Integer.parseInt(speedBox.getValue().substring(0, speedBox.getValue().length() - 1)) * 0.01);
-        }*/
-    }
-
     public void StopApp() {
         // Stop the sound
         if (music != null) {
@@ -291,12 +266,16 @@ public class UI implements Initializable {
     }
 
     public void previousList(ActionEvent actionEvent) {
-        FolderLoader.previousFolder();
-        initFolder();
+        if(FolderLoader.folders.size() > 1){
+            FolderLoader.previousFolder();
+            initFolder();
+        }
     }
 
     public void nextList(ActionEvent actionEvent) {
-        FolderLoader.nextFolder();
-        initFolder();
+        if(FolderLoader.folders.size() > 1){
+            FolderLoader.nextFolder();
+            initFolder();
+        }
     }
 }
