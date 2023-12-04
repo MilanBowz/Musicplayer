@@ -42,6 +42,15 @@
             </ImageView>
         </graphic>
     </Button>
+    <Button fx:id="loopButton" layoutX="475.0" layoutY="550.0" mnemonicParsing="false"  onAction="#changeLoop" prefHeight="50.0" prefWidth="50.0" style="-fx-background-color: BLACK">
+        <graphic>
+            <ImageView fitHeight="40" fitWidth="40" preserveRatio="true">
+                <image>
+                    <Image url="loop.png" />
+                </image>
+            </ImageView>
+        </graphic>
+    </Button>
 
     <Slider fx:id="volumeSlider" layoutX="650.0" layoutY="550.0" orientation="HORIZONTAL" prefHeight="40.0"
             prefWidth="100.0" style="-fx-accent: red; -fx-background-radius: 20px;" value="100.0"/>
@@ -61,7 +70,7 @@
         <columns>
         </columns>
     </TableView>
-    <Button fx:id="previousList" layoutX="100.0" layoutY="0.0" mnemonicParsing="false" onAction="#previousList" prefHeight="50.0" prefWidth="50.0" style="-fx-background-color: BLACK">
+    <Button fx:id="previousList" layoutX="50.0" mnemonicParsing="false" onAction="#previousList" prefHeight="50.0" prefWidth="50.0" style="-fx-background-color: BLACK">
         <graphic>
             <ImageView fitHeight="40" fitWidth="40" preserveRatio="true">
                 <image>
@@ -70,7 +79,7 @@
             </ImageView>
         </graphic>
     </Button>
-    <Button fx:id="nextList" layoutX="150.0" layoutY="0.0" mnemonicParsing="false"  onAction="#nextList" prefHeight="50.0" prefWidth="50.0" style="-fx-background-color: BLACK">
+    <Button fx:id="nextList" layoutX="100.0" mnemonicParsing="false"  onAction="#nextList" prefHeight="50.0" prefWidth="50.0" style="-fx-background-color: BLACK">
         <graphic>
             <ImageView fitHeight="40" fitWidth="40" preserveRatio="true">
                 <image>
@@ -81,7 +90,14 @@
     </Button>
 
     <Button mnemonicParsing="false" onAction="#browseMusic" prefHeight="50.0"
-            prefWidth="100.0" text="Browse" textFill="BLACK">
+            prefWidth="50.0" style="-fx-background-color: BLACK">
+        <graphic>
+            <ImageView fitHeight="40" fitWidth="40" preserveRatio="true">
+                <image>
+                    <Image url="list.png" />
+                </image>
+            </ImageView>
+        </graphic>
     </Button>
 
 

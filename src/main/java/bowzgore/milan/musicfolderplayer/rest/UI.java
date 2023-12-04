@@ -37,9 +37,7 @@ public class UI implements Initializable {
     @FXML
     public Label folderLabel;
     @FXML
-    public Button nextPlaylistButton;
-    @FXML
-    public Button previousPlaylistButton;
+    public Button loopButton;
     @FXML
     private Label songLabel;
     @FXML
@@ -58,9 +56,13 @@ public class UI implements Initializable {
 
     public Sound music;
 
-    public int songPlaying = 0;
+    private int songPlaying = 0;
+    private boolean loopList = false;
+
 
     ImageView playIcon = new ImageView(new Image("play.png"));
+    ImageView loopIcon = new ImageView(new Image("loop_list.png"));
+
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -83,6 +85,10 @@ public class UI implements Initializable {
         playIcon.setFitHeight(40);
         playIcon.setFitWidth(40);
         playIcon.setPreserveRatio(true);
+
+        loopIcon.setFitHeight(40);
+        loopIcon.setFitWidth(40);
+        loopIcon.setPreserveRatio(true);
 
         /*
         for (int i = 0; i < speeds.length; i++) {
@@ -107,12 +113,13 @@ public class UI implements Initializable {
                 @Override
                 public void updateItem(String item, boolean empty) {
                 // Set the background color for a specific ro
-                    super.updateItem(item,empty);
                     if(getIndex() == songPlaying){
                         setStyle("-fx-background-color: darkblue;-fx-text-fill: white;");
                     }
                     else {
-                        setStyle("-fx-text-fill: white;");
+                        super.updateSelected(false);
+                        super.updateItem(item,empty);
+                        setStyle("");
                     }
                 }
                 {
@@ -122,7 +129,6 @@ public class UI implements Initializable {
                         // Update the currently playing song based on the clicked row
                         int clickedIndex = getIndex();
                         updateCurrentlyPlaying(clickedIndex);
-                        updateUIWithSound();
                     }
                 });
                 }
@@ -166,13 +172,7 @@ public class UI implements Initializable {
                 System.out.println("getimage in controller failed");
             }
         }
-        if(Sound.paused){
-            playIcon.setImage(new Image("play.png"));
-        }
-        else {
-            playIcon.setImage(new Image("pause.png"));
-            music.changeVolume(volumeSlider.getValue());
-        }
+        getLoop();
     }
 
 
@@ -190,6 +190,8 @@ public class UI implements Initializable {
                 else {
                     music = new Sound(FolderLoader.musicFiles.get(songPlaying),songProgressBar);
                 }
+                playIcon.setImage(new Image("play.png"));
+                pauseButton.setGraphic(playIcon);
                 updateUIWithSound();
             }
         }
@@ -201,13 +203,15 @@ public class UI implements Initializable {
         if(FolderLoader.musicFiles.get(songPlaying) != null){
             if (Sound.paused) {
                 music.play();
+                playIcon.setImage(new Image("pause.png"));
                 pauseButton.setGraphic(playIcon);
             }
             else {
                 music.pause();
+                playIcon.setImage(new Image("play.png"));
+                music.changeVolume(volumeSlider.getValue());
                 pauseButton.setGraphic(playIcon);
             }
-            updateUIWithSound();
         }
     }
 
@@ -220,8 +224,8 @@ public class UI implements Initializable {
             songPlaying = FolderLoader.musicFiles.size() - 1;
             music.change(FolderLoader.musicFiles.get(FolderLoader.musicFiles.size() - 1));
         }
-        music.play();
         updateUIWithSound();
+        music.play();
     }
 
     public void nextMedia() {
@@ -234,11 +238,13 @@ public class UI implements Initializable {
             music.change(FolderLoader.musicFiles.get(0));
         }
         updateUIWithSound();
+        music.play();
     }
     private void updateCurrentlyPlaying(int clickedIndex) {
         songPlaying = clickedIndex;
         music.change(FolderLoader.musicFiles.get(songPlaying));
         pauseButton.setGraphic(playIcon);
+        playIcon.setImage(new Image("pause.png"));
         updateUIWithSound();
     }
 
@@ -261,21 +267,45 @@ public class UI implements Initializable {
             else {
                 music = new Sound(FolderLoader.musicFiles.get(songPlaying),songProgressBar);
             }
+            playIcon.setImage(new Image("play.png"));
             updateUIWithSound();
         }
     }
 
-    public void previousList(ActionEvent actionEvent) {
+    public void previousList() {
         if(FolderLoader.folders.size() > 1){
             FolderLoader.previousFolder();
             initFolder();
         }
     }
 
-    public void nextList(ActionEvent actionEvent) {
+    public void nextList() {
         if(FolderLoader.folders.size() > 1){
             FolderLoader.nextFolder();
             initFolder();
+        }
+    }
+
+    public void changeLoop() {
+        if(loopList){
+            loopList = false;
+            music.behaviourOnEndMedia(music::replay);
+            loopIcon.setImage(new Image("loop.png"));
+            loopButton.setGraphic(loopIcon);
+        }
+        else {
+            loopList = true;
+            music.behaviourOnEndMedia(this::nextMedia);
+            loopIcon.setImage(new Image("loop_list.png"));
+            loopButton.setGraphic(loopIcon);
+        }
+    }
+    public void getLoop() {
+        if(!loopList){
+            music.behaviourOnEndMedia(music::replay);
+        }
+        else {
+            music.behaviourOnEndMedia(this::nextMedia);
         }
     }
 }

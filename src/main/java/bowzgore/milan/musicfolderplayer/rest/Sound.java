@@ -6,19 +6,13 @@ package bowzgore.milan.musicfolderplayer.rest;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.EventHandler;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Slider;
-import javafx.scene.layout.Region;
 import javafx.scene.media.Media;
-import javafx.scene.media.MediaErrorEvent;
 import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.MediaView;
 import javafx.util.Duration;
 
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.ConsoleHandler;
@@ -28,18 +22,13 @@ import java.util.logging.Logger;
 
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
-import org.jaudiotagger.audio.exceptions.CannotReadException;
-import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
-import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.tag.Tag;
 
-import org.jaudiotagger.tag.TagException;
 import org.jaudiotagger.tag.datatype.Artwork;
 
 public class Sound {
     private File filePlaying;
     private MediaPlayer mediaPlayer;
-
 
     // to store current position
     //Long currentFrame;
@@ -57,6 +46,7 @@ public class Sound {
     boolean changeOnce = false;
 
 
+
     // constructor to initialize streams and clip
     public Sound() {
 
@@ -70,6 +60,7 @@ public class Sound {
         filePlaying = new File(FolderLoader.musicFolder + filelocation).getAbsoluteFile();
         media = new Media(filePlaying.toURI().toString());
         mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);//play song in loop
         barInit(progressBar);
         loadMetadata();
     }
@@ -116,27 +107,20 @@ public class Sound {
         paused = false;
     }
     public void replay() {
-        //start the media
+        mediaPlayer.seek(Duration.millis(0));
+    }
+    public void restart() {
         mediaPlayer.stop();
-        //start the media
         mediaPlayer.play();
-        paused = false;
     }
     public void pause() {
         //start the media
         mediaPlayer.pause();
         paused = true;
     }
-    public void changeSong(){
-        //start the media
-        mediaPlayer.stop();
-    }
     public void changeVolume(double volume) {
         //start the media
         mediaPlayer.setVolume(volume*0.01);
-    }
-    public void changeSpeed(double speed) {
-        mediaPlayer.setRate(speed);
     }
 
     public void change(String file) {
@@ -144,7 +128,7 @@ public class Sound {
         filePlaying = new File(FolderLoader.musicFolder + file).getAbsoluteFile();
         media = new Media(filePlaying.toURI().toString());
         mediaPlayer = new MediaPlayer(media);
-        replay();
+        restart();
         loadMetadata();
         paused = false;
     }
@@ -169,6 +153,9 @@ public class Sound {
 
     public double getCurrent() {
         return mediaPlayer == null ? 0 : mediaPlayer.getCurrentTime().toSeconds();
+    }
+    public void behaviourOnEndMedia(Runnable onEndCallback){
+        mediaPlayer.setOnEndOfMedia(onEndCallback);
     }
 
     public void barInit(Slider progressBar){
