@@ -8,6 +8,6 @@ Music player that reads the .mp3 files of an folder
 
 ## .jar exucutable = musicfolderplayer.jar
 
-java version = 8
+java version = 21
 
 command execute => java -jar musicfolderplayer.jar;
