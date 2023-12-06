@@ -15,6 +15,9 @@ import javafx.util.Duration;
 import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -38,19 +41,16 @@ public class Sound {
 
     public static boolean paused = true;
 
-    public static Artwork coverArt;
+    private static Artwork coverArt;
 
     private Timer timer;
     private TimerTask task ;
 
-    boolean changeOnce = false;
+    private boolean changeOnce = false;
 
+    private CompletableFuture<Void> metadataFuture;
+    private static ExecutorService metadataExecutor = Executors.newSingleThreadExecutor();
 
-
-    // constructor to initialize streams and clip
-    public Sound() {
-
-    }
     // constructor to initialize streams and clip
     public Sound(String filelocation, Slider progressBar) {
         // create File object
@@ -64,33 +64,21 @@ public class Sound {
         loadMetadata();
     }
     private void loadMetadata()  {
-        disableJaudiotaggerLogs();
-        try {
-            AudioFile audioFile = AudioFileIO.read(filePlaying);
-            Tag tag = audioFile.getTag();
-            // Get the cover art
-            if (tag != null) {
-                coverArt = tag.getFirstArtwork();
+        // Create a CompletableFuture for metadata loading
+        metadataFuture = CompletableFuture.runAsync(() -> {
+            try {
+                AudioFile audioFile = AudioFileIO.read(filePlaying);
+                Tag tag = audioFile.getTag();
+                // Get the cover art
+                if (tag != null) {
+                    coverArt = tag.getFirstArtwork();
+                }
+            } catch (Exception e) {
+                // Handle the exception without printing the stack trace
+                // You can log a message or perform other actions as needed
+                System.out.println("Error loading metadata: " + filePlaying);
             }
-        } catch (Exception e) {
-            // Handle the exception without printing the stack trace
-            // You can log a message or perform other actions as needed
-            System.out.println("Error loading metadata: " + filePlaying);
-        }
-    }
-    private static void disableJaudiotaggerLogs() {
-        // Get the logger for Jaudiotagger
-        Logger jaudiotaggerLogger = Logger.getLogger("org.jaudiotagger");
-
-        // Set the logging level to WARNING
-        jaudiotaggerLogger.setLevel(Level.WARNING);
-
-        // Disable console handler
-        for (Handler handler : jaudiotaggerLogger.getHandlers()) {
-            if (handler instanceof ConsoleHandler) {
-                jaudiotaggerLogger.removeHandler(handler);
-            }
-        }
+        }, metadataExecutor);
     }
 
     // Getter method for cover art
@@ -201,6 +189,7 @@ public class Sound {
         mediaPlayer.seek(Duration.seconds(seconds));
     }
 
-
-
+    public CompletableFuture<Void> getMetadataFuture() {
+        return metadataFuture;
+    }
 }

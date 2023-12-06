@@ -87,19 +87,17 @@ public class UI implements Initializable {
             }
 
         });
-
-
         stringRecordsList.setCellFactory(tv -> new ListCell<>() {
             @Override
             protected void updateItem(String item, boolean empty) {
-                if (Objects.equals(item, FolderLoader.musicFiles.get(songPlaying))) {
-                    setStyle("-fx-background-color: darkblue; -fx-text-fill: white;");
+                setText(empty ? null : item);
+                if(FolderLoader.musicFiles.get(songPlaying).equals(item)){
+                    setStyle("-fx-background-color: darkgray;-fx-text-fill: white;");
                 }
                 else {
-                    setStyle("-fx-background-color: black; -fx-text-fill: white;");
+                    setStyle("-fx-background-color: black;-fx-text-fill: white;");
                     super.updateItem(item, empty);
                 }
-                setText(item);
             }
             {
                 // Add an event handler to the row
@@ -143,16 +141,19 @@ public class UI implements Initializable {
         stringRecordsList.refresh();
         songLabel.setText(FolderLoader.musicFiles.get(songPlaying));
         // Update cover art
-        Artwork coverArt = music.getCoverArt();
-        if (coverArt != null) {
-            try {
-                Image image = SwingFXUtils.toFXImage(coverArt.getImage(), null);
-                imageView.setImage(image);
+        // Run this code when metadata loading is complete
+        music.getMetadataFuture().thenRun(() -> {
+            Artwork coverArt = music.getCoverArt();
+            if (coverArt != null) {
+                try {
+                    Image image = SwingFXUtils.toFXImage(coverArt.getImage(), null);
+                    imageView.setImage(image);
+                }
+                catch (IOException i){
+                    System.out.println("getimage in controller failed");
+                }
             }
-            catch (IOException i){
-                System.out.println("getimage in controller failed");
-            }
-        }
+        });
         getLoop();
     }
 
@@ -202,7 +203,7 @@ public class UI implements Initializable {
             songPlaying = FolderLoader.musicFiles.size() - 1;
             music.change(FolderLoader.musicFiles.get(FolderLoader.musicFiles.size() - 1));
         }
-        playIcon.setImage(new Image("play.png"));
+        playIcon.setImage(new Image("pause.png"));
         updateUIWithSound();
         music.play();
     }
@@ -216,7 +217,7 @@ public class UI implements Initializable {
             songPlaying = 0;
             music.change(FolderLoader.musicFiles.get(0));
         }
-        playIcon.setImage(new Image("play.png"));
+        playIcon.setImage(new Image("pause.png"));
         updateUIWithSound();
         music.play();
     }
@@ -251,6 +252,7 @@ public class UI implements Initializable {
     }
 
     public void previousList() {
+        songPlaying = 0;
         if(FolderLoader.folders.size() > 1){
             FolderLoader.previousFolder();
             initFolder();
@@ -258,6 +260,7 @@ public class UI implements Initializable {
     }
 
     public void nextList() {
+        songPlaying = 0;
         if(FolderLoader.folders.size() > 1){
             FolderLoader.nextFolder();
             initFolder();
