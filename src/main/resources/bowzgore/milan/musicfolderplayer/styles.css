@@ -1,21 +1,6 @@
-
-.table-view {
+#stringRecordsList {
     -fx-control-inner-background: black;
-    -fx-background-color: black;
     -fx-text-fill: white;
-}
-.table-view .column-header {
-    -fx-background-color: black;
-    -fx-text-fill: white;
-}
-
-
-.table-row-cell {
-    -fx-background-color: black;
-    -fx-text-fill: white;
-    -fx-border-color: #1E1E1E;
-    -fx-border-width: 0 0 1 0;
-    -fx-border-style: solid;
 }
 
 

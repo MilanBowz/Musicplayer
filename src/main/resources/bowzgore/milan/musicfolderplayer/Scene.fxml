@@ -12,8 +12,9 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.layout.Region?>
+<?import javafx.scene.control.ListView?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8.0.391"
-          fx:id="pane"  xmlns:fx="http://javafx.com/fxml/1" fx:controller="bowzgore.milan.musicfolderplayer.rest.UI" style="-fx-background-color:black">
+            fx:id="pane" xmlns:fx="http://javafx.com/fxml/1" fx:controller="bowzgore.milan.musicfolderplayer.rest.UI" style="-fx-background-color:black">
 
     <Button fx:id="pauseButton" layoutX="375.0" layoutY="550.0" onAction="#play" prefHeight="50.0" prefWidth="50.0" style="-fx-background-color: BLACK">
         <graphic>
@@ -66,10 +67,8 @@
 
     <!-- TableView for String Records -->
     <Label fx:id="folderLabel" layoutX="400.0" layoutY="0.0" prefHeight="10.0" prefWidth="400.0" style="-fx-text-fill: white;">here is the folder</Label>
-    <TableView fx:id="stringRecordsTable" layoutX="400.0" layoutY="20.0" prefHeight="425.0" prefWidth="400.0" >
-        <columns>
-        </columns>
-    </TableView>
+    <ListView fx:id="stringRecordsList" layoutX="400.0" layoutY="20.0" prefHeight="425.0" prefWidth="400.0" />
+
     <Button fx:id="previousList" layoutX="50.0" mnemonicParsing="false" onAction="#previousList" prefHeight="50.0" prefWidth="50.0" style="-fx-background-color: BLACK">
         <graphic>
             <ImageView fitHeight="40" fitWidth="40" preserveRatio="true">

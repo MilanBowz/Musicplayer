@@ -7,6 +7,7 @@ import java.net.URL;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.css.converter.StringConverter;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
@@ -14,6 +15,7 @@ import javafx.scene.input.MouseButton;
 
 import java.util.*;
 import java.util.Timer;
+import java.util.stream.Collectors;
 
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -39,6 +41,8 @@ public class UI implements Initializable {
     @FXML
     public Button loopButton;
     @FXML
+    public ListView<String> stringRecordsList;
+    @FXML
     private Label songLabel;
     @FXML
     private Button pauseButton, resetButton, previousButton, nextButton;
@@ -50,9 +54,6 @@ public class UI implements Initializable {
     private Slider songProgressBar;
     @FXML
     private ImageView imageView;
-
-    @FXML
-    private TableView<String> stringRecordsTable;
 
     public Sound music;
 
@@ -70,17 +71,6 @@ public class UI implements Initializable {
             FolderLoader.readFolderInit();
             this.initFolder();
         }
-        // Set up the table columns
-        TableColumn<String, String> recordsColumn = new TableColumn<>();
-        recordsColumn.setPrefWidth(400);
-        // Set up the table columns
-        recordsColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue()));
-        recordsColumn.setSortType(TableColumn.SortType.ASCENDING);
-        recordsColumn.sortableProperty().setValue(false);
-        // Add columns to the table
-        stringRecordsTable.getColumns().add(recordsColumn);
-        stringRecordsTable.setTableMenuButtonVisible(false);
-        stringRecordsTable.setContextMenu(null);
 
         playIcon.setFitHeight(40);
         playIcon.setFitWidth(40);
@@ -90,16 +80,6 @@ public class UI implements Initializable {
         loopIcon.setFitWidth(40);
         loopIcon.setPreserveRatio(true);
 
-        /*
-        for (int i = 0; i < speeds.length; i++) {
-            speedBox.getItems().add(Integer.toString(speeds[i]) + "%");
-        }*/
-
-        //Image image = new Image("src/main/java/bowzgore/icon.png");
-        //imageView.setImage(image);
-
-        /*speedBox.setOnAction(this::changeSpeed);*/
-
         volumeSlider.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -108,21 +88,19 @@ public class UI implements Initializable {
 
         });
 
-        // Set up the table
-        stringRecordsTable.setRowFactory(tv -> new TableRow<String>() {
-            @Override
-            public void updateItem(String item, boolean empty) {
-                // Set the background color and text color for a specific row
-                if (Objects.equals(item, FolderLoader.musicFiles.get(songPlaying))) {
-                    setStyle("-fx-background-color: darkblue;");
-                    super.updateSelected(true);
-                } else {
-                    setStyle("");
-                    super.updateSelected(false);
-                }
-                super.updateItem(item, empty);
-            }
 
+        stringRecordsList.setCellFactory(tv -> new ListCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                if (Objects.equals(item, FolderLoader.musicFiles.get(songPlaying))) {
+                    setStyle("-fx-background-color: darkblue; -fx-text-fill: white;");
+                }
+                else {
+                    setStyle("-fx-background-color: black; -fx-text-fill: white;");
+                    super.updateItem(item, empty);
+                }
+                setText(item);
+            }
             {
                 // Add an event handler to the row
                 setOnMouseClicked(event -> {
@@ -133,6 +111,8 @@ public class UI implements Initializable {
                     }
                 });
             }
+
+            // Add your logic for handling the selected item
         });
     }
 
@@ -160,7 +140,7 @@ public class UI implements Initializable {
 
     private void updateUIWithSound()  {
         // Update other UI elements as needed
-        stringRecordsTable.refresh();
+        stringRecordsList.refresh();
         songLabel.setText(FolderLoader.musicFiles.get(songPlaying));
         // Update cover art
         Artwork coverArt = music.getCoverArt();
@@ -181,9 +161,6 @@ public class UI implements Initializable {
         if(FolderLoader.readFolderBrowse(event)){
             if(!FolderLoader.musicFiles.isEmpty()){
                 songPlaying = 0;
-                //ObservableList<String> observableSongs = FXCollections.observableArrayList(FolderLoader.musicFiles);
-                // Add data to the table
-                stringRecordsTable.setItems(FolderLoader.musicFiles);
                 folderLabel.setText(FolderLoader.musicFolder);
                 if(music != null){
                     music.changeFolder(FolderLoader.musicFiles.get(songPlaying));
@@ -225,6 +202,7 @@ public class UI implements Initializable {
             songPlaying = FolderLoader.musicFiles.size() - 1;
             music.change(FolderLoader.musicFiles.get(FolderLoader.musicFiles.size() - 1));
         }
+        playIcon.setImage(new Image("play.png"));
         updateUIWithSound();
         music.play();
     }
@@ -238,6 +216,7 @@ public class UI implements Initializable {
             songPlaying = 0;
             music.change(FolderLoader.musicFiles.get(0));
         }
+        playIcon.setImage(new Image("play.png"));
         updateUIWithSound();
         music.play();
     }
@@ -258,17 +237,14 @@ public class UI implements Initializable {
     public void initFolder(){
         if(!FolderLoader.musicFiles.isEmpty()){
             songPlaying = 0;
-
             if(music != null){
                 music.changeFolder(FolderLoader.musicFiles.get(songPlaying));
             }
             else {
                 music = new Sound(FolderLoader.musicFiles.get(songPlaying),songProgressBar);
             }
-
-            stringRecordsTable.setItems(FolderLoader.musicFiles);
+            stringRecordsList.setItems(FolderLoader.musicFiles);
             folderLabel.setText(FolderLoader.musicFolder);
-
             playIcon.setImage(new Image("play.png"));
             updateUIWithSound();
         }

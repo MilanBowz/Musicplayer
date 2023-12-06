@@ -56,7 +56,6 @@ public class Sound {
         // create File object
         //initialize(null,null);
         beginTimer(progressBar);
-
         filePlaying = new File(FolderLoader.musicFolder + filelocation).getAbsoluteFile();
         media = new Media(filePlaying.toURI().toString());
         mediaPlayer = new MediaPlayer(media);
