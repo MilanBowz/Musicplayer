@@ -96,8 +96,8 @@ public class UI implements Initializable {
                 }
                 else {
                     setStyle("-fx-background-color: black;-fx-text-fill: white;");
-                    super.updateItem(item, empty);
                 }
+                super.updateItem(item, empty);
             }
             {
                 // Add an event handler to the row
