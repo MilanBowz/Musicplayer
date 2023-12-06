@@ -110,19 +110,20 @@ public class UI implements Initializable {
 
         // Set up the table
         stringRecordsTable.setRowFactory(tv -> new TableRow<String>() {
-                @Override
-                public void updateItem(String item, boolean empty) {
-                // Set the background color for a specific ro
-                    if(getIndex() == songPlaying){
-                        setStyle("-fx-background-color: darkblue;-fx-text-fill: white;");
-                    }
-                    else {
-                        super.updateSelected(false);
-                        super.updateItem(item,empty);
-                        setStyle("");
-                    }
+            @Override
+            public void updateItem(String item, boolean empty) {
+                // Set the background color and text color for a specific row
+                if (Objects.equals(item, FolderLoader.musicFiles.get(songPlaying))) {
+                    setStyle("-fx-background-color: darkblue;");
+                    super.updateSelected(true);
+                } else {
+                    setStyle("");
+                    super.updateSelected(false);
                 }
-                {
+                super.updateItem(item, empty);
+            }
+
+            {
                 // Add an event handler to the row
                 setOnMouseClicked(event -> {
                     if (!isEmpty() && event.getButton() == MouseButton.PRIMARY) {
@@ -131,7 +132,7 @@ public class UI implements Initializable {
                         updateCurrentlyPlaying(clickedIndex);
                     }
                 });
-                }
+            }
         });
     }
 
@@ -257,16 +258,17 @@ public class UI implements Initializable {
     public void initFolder(){
         if(!FolderLoader.musicFiles.isEmpty()){
             songPlaying = 0;
-            ObservableList<String> observableSongs = FXCollections.observableArrayList(FolderLoader.musicFiles);
-            // Add data to the table
-            stringRecordsTable.setItems(observableSongs);
-            folderLabel.setText(FolderLoader.musicFolder);
+
             if(music != null){
                 music.changeFolder(FolderLoader.musicFiles.get(songPlaying));
             }
             else {
                 music = new Sound(FolderLoader.musicFiles.get(songPlaying),songProgressBar);
             }
+
+            stringRecordsTable.setItems(FolderLoader.musicFiles);
+            folderLabel.setText(FolderLoader.musicFolder);
+
             playIcon.setImage(new Image("play.png"));
             updateUIWithSound();
         }
