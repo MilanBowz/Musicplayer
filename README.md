@@ -1,6 +1,6 @@
-# MFC (Music Folder Player)
+# MFP (Music Folder Player)
 
-Music player that reads the .mp3 files of an folder
+Music player that reads the .mp3 files of an folder (PC)
 
 - basic controls play,pause,next,previous
 - volume music in slider is working
